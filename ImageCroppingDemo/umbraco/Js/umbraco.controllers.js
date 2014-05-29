@@ -1,4 +1,4 @@
-/*! umbraco - v7.1.3 - 2014-05-17
+/*! umbraco - v7.1.4 - 2014-05-28
  * https://github.com/umbraco/umbraco-cms/
  * Copyright (c) 2014 Umbraco HQ;
  * Licensed MIT
@@ -223,9 +223,6 @@ function NavigationController($scope, $rootScope, $location, $log, $routeParams,
     //this reacts to the options item in the tree
     //todo, migrate to nav service
     $scope.searchShowMenu = function (ev, args) {
-        $scope.currentNode = args.node;
-        args.scope = $scope;
-
         //always skip default
         args.skipDefault = true;
         navigationService.showMenu(ev, args);
@@ -293,8 +290,10 @@ function SearchController($scope, searchService, $log, $location, navigationServ
                     iterateResults(false);
                 break;
             case 13:
-                $location.path($scope.selectedItem.editorPath);
-                navigationService.hideSearch();
+                if ($scope.selectedItem) {
+                    $location.path($scope.selectedItem.editorPath);
+                    navigationService.hideSearch();
+                }                
                 break;
         }
     };
@@ -434,7 +433,7 @@ function ContentEditDialogController($scope) {
     $scope.model.defaultButton = null;
     $scope.model.subButtons = [];
     
-    var dialogOptions = $scope.$parent.dialogOptions;
+    var dialogOptions = $scope.dialogOptions;
     if(dialogOptions.entity){
     	$scope.model.entity = dialogOptions.entity;
     	$scope.loaded = true;	
@@ -446,7 +445,7 @@ angular.module("umbraco")
 //used for the media picker dialog
 angular.module("umbraco").controller("Umbraco.Dialogs.ContentPickerController",
 	function ($scope, eventsService, entityResource, searchService, $log) {	
-	var dialogOptions = $scope.$parent.dialogOptions;
+	var dialogOptions = $scope.dialogOptions;
 	$scope.dialogTreeEventHandler = $({});
 	$scope.results = [];
 
@@ -780,7 +779,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.LegacyDeleteController", L
 //used for the media picker dialog
 angular.module("umbraco").controller("Umbraco.Dialogs.LinkPickerController",
 	function ($scope, eventsService, dialogService, entityResource, contentResource, mediaHelper, $log) {
-	var dialogOptions = $scope.$parent.dialogOptions;
+	var dialogOptions = $scope.dialogOptions;
 	
 	$scope.dialogTreeEventHandler = $({});
 	$scope.target = {};
@@ -943,7 +942,7 @@ angular.module("umbraco")
     .controller("Umbraco.Dialogs.MediaPickerController",
         function ($scope, mediaResource, umbRequestHelper, entityResource, $log, mediaHelper, eventsService, treeService, $cookies) {
 
-            var dialogOptions = $scope.$parent.dialogOptions;
+            var dialogOptions = $scope.dialogOptions;
 
             $scope.onlyImages = dialogOptions.onlyImages;
             $scope.showDetails = dialogOptions.showDetails;
@@ -1058,7 +1057,7 @@ angular.module("umbraco")
 //used for the member picker dialog
 angular.module("umbraco").controller("Umbraco.Dialogs.MemberGroupPickerController",
     function($scope, eventsService, entityResource, searchService, $log) {
-        var dialogOptions = $scope.$parent.dialogOptions;
+        var dialogOptions = $scope.dialogOptions;
         $scope.dialogTreeEventHandler = $({});
         $scope.results = [];
         $scope.dialogData = [];
@@ -1125,7 +1124,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.MemberGroupPickerControlle
 //used for the member picker dialog
 angular.module("umbraco").controller("Umbraco.Dialogs.MemberPickerController",
     function($scope, eventsService, entityResource, searchService, $log) {
-        var dialogOptions = $scope.$parent.dialogOptions;
+        var dialogOptions = $scope.dialogOptions;
         $scope.dialogTreeEventHandler = $({});
         $scope.results = [];
 
@@ -1289,7 +1288,7 @@ angular.module("umbraco").controller("Umbraco.Dialogs.RteEmbedController", funct
 angular.module("umbraco").controller("Umbraco.Dialogs.TreePickerController",
 	function ($scope, entityResource, eventsService, $log, searchService) {
 		
-		var dialogOptions = $scope.$parent.dialogOptions;
+		var dialogOptions = $scope.dialogOptions;
 		$scope.dialogTreeEventHandler = $({});
 		$scope.section = dialogOptions.section;
 		$scope.treeAlias = dialogOptions.treeAlias;
@@ -1511,7 +1510,7 @@ angular.module("umbraco")
             var pendingChangeEvent = eventsService.on("valFormManager.pendingChanges", function (e, args) {
                 //one time listener, remove the event
                 pendingChangeEvent();
-                $scope.hide();
+                $scope.close();
             });
 
             //perform the path change, if it is successful then the promise will resolve otherwise it will fail
@@ -1520,7 +1519,7 @@ angular.module("umbraco")
 
         $scope.gotoHistory = function (link) {
             $location.path(link);
-            $scope.hide();
+            $scope.close();
         };
 
         //Manually update the remaining timeout seconds
@@ -1635,7 +1634,7 @@ angular.module("umbraco")
 	.controller("Umbraco.Editors.Content.CopyController",
 	function ($scope, eventsService, contentResource, navigationService, appState, treeService) {
 
-	    var dialogOptions = $scope.$parent.dialogOptions;
+	    var dialogOptions = $scope.dialogOptions;
 
 	    $scope.relateToOriginal = false;
 	    $scope.dialogTreeEventHandler = $({});
@@ -2068,7 +2067,7 @@ angular.module("umbraco").controller("Umbraco.Editors.Content.EmptyRecycleBinCon
 //used for the media picker dialog
 angular.module("umbraco").controller("Umbraco.Editors.Content.MoveController",
 	function ($scope, eventsService, contentResource, navigationService, appState, treeService) {
-	var dialogOptions = $scope.$parent.dialogOptions;
+	var dialogOptions = $scope.dialogOptions;
 	
 	$scope.dialogTreeEventHandler = $({});
 	var node = dialogOptions.currentNode;
@@ -2217,7 +2216,7 @@ function startupLatestEditsController($scope) {
 angular.module("umbraco").controller("Umbraco.Dashboard.StartupLatestEditsController", startupLatestEditsController);
 
 function MediaFolderBrowserDashboardController($rootScope, $scope, assetsService, $routeParams, $timeout, $element, $location, umbRequestHelper,navigationService, mediaResource, $cookies) {
-        var dialogOptions = $scope.$parent.dialogOptions;
+        var dialogOptions = $scope.dialogOptions;
 
         $scope.filesUploading = [];
         $scope.options = {
@@ -2707,7 +2706,7 @@ angular.module("umbraco").controller("Umbraco.Editors.Media.EmptyRecycleBinContr
 //used for the media picker dialog
 angular.module("umbraco").controller("Umbraco.Editors.Media.MoveController",
 	function ($scope, eventsService, mediaResource, appState, treeService, navigationService) {
-	var dialogOptions = $scope.$parent.dialogOptions;
+	var dialogOptions = $scope.dialogOptions;
 	
 	$scope.dialogTreeEventHandler = $({});
 	var node = dialogOptions.currentNode;
@@ -2982,7 +2981,6 @@ angular.module('umbraco')
 			var d = dialogService.treePicker({
 				section: $scope.cfg.type,
 				treeAlias: $scope.cfg.type,
-				scope: $scope, 
 				multiPicker: $scope.cfg.multiPicker,
 				callback: populate});
 		};
@@ -3149,7 +3147,6 @@ angular.module('umbraco')
 			var d = dialogService.treePicker({
 								section: $scope.cfg.type,
 								treeAlias: $scope.cfg.type,
-								scope: $scope, 
 								multiPicker: $scope.cfg.multiPicker,
 								callback: populate});
 		};
@@ -3230,7 +3227,6 @@ angular.module('umbraco')
 			var d = dialogService.treePicker({
 								section: $scope.model.value.type,
 								treeAlias: $scope.model.value.type,
-								scope: $scope, 
 								multiPicker: false,
 								callback: populate});
 		};
@@ -3485,8 +3481,13 @@ angular.module("umbraco").controller("Umbraco.PropertyEditors.CheckboxListContro
     });
 
 function ColorPickerController($scope) {
-    $scope.selectItem = function (color) {
-        $scope.model.value = color;
+    $scope.toggleItem = function (color) {
+        if ($scope.model.value == color) {
+            $scope.model.value = "";
+        }
+        else {
+            $scope.model.value = color;
+        }
     };
     $scope.isConfigured = $scope.model.config && $scope.model.config.items && _.keys($scope.model.config.items).length > 0;
 }
@@ -3921,6 +3922,9 @@ function fileUploadController($scope, $element, $compile, imageHelper, fileManag
 
     /** this method is used to initialize the data and to re-initialize it if the server value is changed */
     function initialize(index) {
+
+        clearFiles();
+
         if (!index) {
             index = 1;
         }
@@ -4012,9 +4016,6 @@ function fileUploadController($scope, $element, $compile, imageHelper, fileManag
                 initialize($scope.rebuildInput.index + 1);
             }
 
-            //if (newVal !== "{clearFiles: true}" && newVal !== $scope.originalValue && !newVal.startsWith("{selectedFiles:")) {
-            //    initialize($scope.rebuildInput.index + 1);
-            //}
         }
     });
 };
@@ -4062,7 +4063,7 @@ angular.module("umbraco")
 })
 .controller("Umbraco.PropertyEditors.FolderBrowserController",
     function ($rootScope, $scope, assetsService, $routeParams, $timeout, $element, $location, $log, umbRequestHelper, mediaResource, imageHelper, navigationService, editorState) {
-        var dialogOptions = $scope.$parent.dialogOptions;
+        var dialogOptions = $scope.dialogOptions;
 
         $scope.creating = $routeParams.create;
 
@@ -4166,7 +4167,7 @@ angular.module("umbraco")
             google.maps.event.addListener(map, 'click', function (event) {
 
                 dialogService.mediaPicker({
-                    scope: $scope, callback: function (data) {
+                    callback: function (data) {
                         var image = data.selection[0].src;
 
                         var latLng = event.latLng;
@@ -4224,15 +4225,15 @@ angular.module("umbraco").controller("Umbraco.PropertyEditors.GridController",
     
     //we most likely will need some iframe-motherpage interop here
        $scope.openMediaPicker =function(){
-               var d = dialogService.mediaPicker({scope: $scope, callback: renderImages});
+               var d = dialogService.mediaPicker({callback: renderImages});
        };
 
        $scope.openPropertyDialog =function(){
-               var d = dialogService.property({scope: $scope, callback: renderProperty});
+               var d = dialogService.property({callback: renderProperty});
        };
 
        $scope.openMacroDialog =function(){
-               var d = dialogService.macroPicker({scope: $scope, callback: renderMacro});
+               var d = dialogService.macroPicker({callback: renderMacro});
        };
 
        function renderProperty(data){
@@ -4243,8 +4244,8 @@ angular.module("umbraco").controller("Umbraco.PropertyEditors.GridController",
        //   $scope.currentElement.html( macroFactory.renderMacro(data.macro, -1) ); 
        }
       
-       function renderImages(data){
-           var list = $("<ul class='thumbnails'></ul>")
+       function renderImages(data) {
+           var list = $("<ul class='thumbnails'></ul>");
            $.each(data.selection, function(i, image) {
                list.append( $("<li class='span2'><img class='thumbnail' src='" + image.src + "'></li>") );
            });
@@ -4356,6 +4357,13 @@ angular.module('umbraco')
                 reader.readAsDataURL(args.files[0]);
             }
         });
+
+
+        //here we declare a special method which will be called whenever the value has changed from the server
+        $scope.model.onValueChanged = function (newVal, oldVal) {
+            //clear current uploaded files
+            fileManager.setFiles($scope.model.alias, []);
+        };
 
         var unsubscribe = $scope.$on("formSubmitting", function () {
             $scope.done();
@@ -4746,7 +4754,6 @@ angular.module('umbraco')
 			}
 			
 			dialogService.macroPicker({
-                scope: $scope,
                 dialogData : dialogData,
                     callback: function(data) {
 
@@ -4991,7 +4998,6 @@ angular.module('umbraco')
 		$scope.openMemberGroupPicker =function(){
 				var d = dialogService.memberGroupPicker(
 							{
-								scope: $scope, 
 								multiPicker: $scope.cfg.multiPicker,
 								filter: $scope.cfg.filter,
 								filterCssClass: "not-allowed", 
@@ -5108,7 +5114,6 @@ angular.module('umbraco')
 		$scope.openMemberPicker =function(){
 				var d = dialogService.memberPicker(
 							{
-								scope: $scope, 
 								multiPicker: $scope.cfg.multiPicker,
 								filter: $scope.cfg.filter,
 								filterCssClass: "not-allowed", 
@@ -5294,14 +5299,14 @@ angular.module("umbraco")
 
             $scope.internal = function ($event) {
                 $scope.currentEditLink = null;
-                var d = dialogService.contentPicker({ scope: $scope, multipicker: false, callback: select });
+                var d = dialogService.contentPicker({ multipicker: false, callback: select });
                 $event.preventDefault();
             };
             
             $scope.selectInternal = function ($event, link) {
 
                 $scope.currentEditLink = link;
-                var d = dialogService.contentPicker({ scope: $scope, multipicker: false, callback: select });
+                var d = dialogService.contentPicker({ multipicker: false, callback: select });
                 $event.preventDefault();
             };
 
@@ -5567,9 +5572,6 @@ angular.module("umbraco")
                     //Create the embedded plugin
                     tinyMceService.createInsertEmbeddedMedia(editor, $scope);
 
-                    //Create the insert link plugin
-                    tinyMceService.createLinkPicker(editor, $scope);
-
                     //Create the insert macro plugin
                     tinyMceService.createInsertMacro(editor, $scope);
                 };
@@ -5763,6 +5765,12 @@ function sliderController($scope, $log, $element, assetsService, angularHelper) 
 
         //initiate slider, add event handler and get the instance reference (stored in data)
         var slider = $element.find('.slider-item').slider({
+            max: $scope.model.config.maxVal,
+            min: $scope.model.config.minVal,
+            orientation: $scope.model.config.orientation,
+            selection: "after",
+            step: $scope.model.config.step,
+            tooltip: "show",
             //set the slider val - we cannot do this with data- attributes when using ranges
             value: sliderVal
         }).on('slideStop', function () {
