@@ -160,12 +160,6 @@ $RECYCLE.BIN/
 ImageCroppingDemo/[Bb]in/*
 
 # =========================
-# Slimsy
-# =========================
-ImageCroppingDemo/Scripts/*.js
-PackageBuild/Package/*
-
-# =========================
 # Umbraco
 # =========================
 ImageCroppingDemo/App_Data/umbraco.config
