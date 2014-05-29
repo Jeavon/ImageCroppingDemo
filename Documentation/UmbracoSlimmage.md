@@ -1,4 +1,4 @@
-# Developing a website with responsive images using the Umbraco v7.1.3 Image Cropper #
+# Developing a website with responsive images using the Umbraco v7.1.4 Image Cropper #
 
 ## The requirement: ##
 
