@@ -1,4 +1,5 @@
-﻿@inherits UmbracoTemplatePage
+﻿@using Umbraco.Web.Models
+@inherits UmbracoTemplatePage
 @{
     // Model.Content is the current page that we're on
     // AncestorsOrSelf is all of the ancestors this page has in the tree
@@ -20,7 +21,7 @@
                             if (feature.HasValue("Image"))
                             {
                                 var featureImage = Umbraco.TypedMedia((int)feature.Image);
-                                <a href="@feature.Url" class="image image-full"><img src="@featureImage.GetCropUrl(270, 161)" alt="" /></a>
+                                <a href="@feature.Url" class="image image-full"><img src="@featureImage.GetCropUrl(270, 161, ratioMode:ImageCropRatioMode.Height, furtherOptions:"&slimmage=true")" alt="" /></a>
                             }
                         }
                                                 
