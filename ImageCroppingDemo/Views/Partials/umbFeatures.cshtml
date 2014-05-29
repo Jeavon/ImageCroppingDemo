@@ -16,7 +16,14 @@
                 <div class="3u">
                     <!-- Feature -->
                     <section class="is-feature">
-                        <a href="@feature.Url" class="image image-full"><img src="@feature.Image" alt="" /></a>
+                        @{
+                            if (feature.HasValue("Image"))
+                            {
+                                var featureImage = Umbraco.TypedMedia((int)feature.Image);
+                                <a href="@feature.Url" class="image image-full"><img src="@featureImage.GetCropUrl(270, 161)" alt="" /></a>
+                            }
+                        }
+                                                
                         <h3><a href="@feature.Url">@feature.Name</a></h3>
                         @Umbraco.Truncate(feature.BodyText, 100)
                     </section>
