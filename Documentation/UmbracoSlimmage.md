@@ -28,19 +28,24 @@ Assuming that the server will respect the querystring value (more on that later)
 Using Umbraco v7.1.4+ with MVC templates
 
 **Step 1:** Configure cropper data type and apply to media. We are not going to use any predefined crops as our images may be used for many different crops throughout the website, our editors will use the interest point (blue dot) to specify the most important element in the image.
-![Creating Image Cropper Data Type](Figure1.png)
+
+![Creating Image Cropper Data Type](Figure1.png)<br/>
 Figure 1: Creating the image cropper data type
-![Adding Cropper to Image Media Type](Figure2.png)
+
+![Adding Cropper to Image Media Type](Figure2.png)<br/>
 Figure 2: Replacing the upload data type with the image cropper on the "Image" media type
 
 **Step 2:** Create a media folder and upload some images and adjust interest point as needed
-![Uploading some media](Figure3.png)
+
+![Uploading some media](Figure3.png)<br/>
 Figure 3: Upload some images
-![Adjusting interest point](Figure4.png)
+
+![Adjusting interest point](Figure4.png)<br/>
 Figure 4: Adjusting the interest point on a image
 
-**Step 3:** Using a media picker data type (property alias "Image" in the below example) select the images on the nodes we are going to get images from
-![Selecting a image](Figure5.png)
+**Step 3:** Using a media picker data type (property alias "Image" in the below example) select the images on the nodes we are going to get images from.
+
+![Selecting a image](Figure5.png)<br/>
 Figure 5: Selecting a image for the "About" node
 
 **Step 4:** Add some Razor to our view (template)/partial view to output the required `<img>` element with the correct ImageProcessor Url and specify the required crop dimensions for this view.
@@ -66,11 +71,13 @@ Figure 5: Selecting a image for the "About" node
 This snippet is using the dynamic CurrentPage model, however we are using a typed media item `TypedMedia` because we want to specify width and height to the `GetCropUrl` extension method and this is not available when using the dynamic `Media` item.
 
 **Step 5:** Test our website, our images should be showing at the correct dimensions. Now lets make them responsive.
-![Result!](Figure6.png)
+
+![Result!](Figure6.png)<br/>
 Figure 6: Our images are cropping to our requested sizes and using the interest points!
 
 **Step 6:** Add Slimmage to our solution. You can download Slimmage.js from GitHub [https://github.com/imazen/slimmage](https://github.com/imazen/slimmage) and copy it into your Scripts folder.  Now we need to add a reference to it in our layout template so it’s included on all pages of our website. Slimmage.js should be the first .js file to be loaded.
-![Result!](Figure7.png)
+
+![Result!](Figure7.png)<br/>
 Figure 7: Added slimmage.js to the layout template
 
 **Step 7:** For Slimmage to work, we need our <img> tags to be wrapped in `<noscript data-slimmage>` tags. We could do this manually of course, but there is a handy Nuget Package called SlimResponse which takes care of this for us so that we don’t need to do it manually everywhere we want Slimmage. SlimResponse used the HTMLAgilityPack to check `<img>` tags that have “slimmage=true” in their href and then wrap them in the `<noscript>` tag meaning we don’t need to do anything to our HTML markup in our templates.
@@ -80,11 +87,13 @@ In Visual Studio (if you don’t use Visual Studio, don’t worry, see Slimsy be
 	
 		<img src="@featureImage.GetCropUrl(270, 161, ratioMode:ImageCropRatioMode.Height, furtherOptions:"&slimmage=true")" alt="" />
 We need to add the ratioMode parameter, this will mean that ImageProcessor will resize the height as a ratio of the width, we need this so that our images height is scaled when Slimmage.js alters the width. Additionally we add the furtherOptions parameter with `&slimmage=true` so that SlimResponse will pick up our images and convert them to `<noscript>` tags 
-![noscript!](Figure8.png)
+
+![noscript!](Figure8.png)<br/>
 Figure 8: Checking for `<noscript>` tags so that we know SlimResponse is working 
 
-**Step 9:** Job done, resize our window small (phone size), reload then and resize window up to see Slimmage adjust our image widths
-8. ![woohoo!](Figure9.png)
+**Step 9:** Job done, resize our window small (phone size), reload then and resize window up to see Slimmage adjust our image widths.
+
+8. ![Woohoo!](Figure9.png)<br/>
 Figure 9: See Slimmage in action
 
 # Slimsy #
