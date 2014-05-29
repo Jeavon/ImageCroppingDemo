@@ -91,7 +91,7 @@ We need to add the ratioMode parameter, this will mean that ImageProcessor will 
 ![noscript!](Figure8.png)<br/>
 Figure 8: Checking for `<noscript>` tags so that we know SlimResponse is working 
 
-**Step 9:** Job done, resize our window small (phone size), reload then and resize window up to see Slimmage adjust the image widths.
+**Step 9:** Job done, with this starter kit, the images actually get larger at the smaller (phone) size. So from a normal sized window, shrink the window down to see Slimmage adjust the image widths. You will see in your browser console what is happening from Slimmages logging.
 
 ![Woohoo!](Figure9.png)<br/>
 Figure 9: See Slimmage in action
