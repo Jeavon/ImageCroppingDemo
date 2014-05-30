@@ -80,12 +80,19 @@ Figure 6: Our images are cropping to our requested sizes and using the interest 
 ![Result!](Figure7.png)<br/>
 Figure 7: Added slimmage.js to the layout template
 
-**Step 7:** For Slimmage to work, we need our <img> tags to be wrapped in `<noscript data-slimmage>` tags. We could do this manually of course, but there is a handy Nuget Package called SlimResponse which takes care of this for us so that we don’t need to do it manually everywhere we want Slimmage. SlimResponse used the HTMLAgilityPack to check `<img>` tags that have “slimmage=true” in their href and then wrap them in the `<noscript>` tag meaning we don’t need to do anything to our HTML markup in our templates.
+**Step 7:** For Slimmage to work, we need our `<img>` tags to be wrapped in `<noscript data-slimmage>` tags. We could do this manually of course, but there is a handy Nuget Package called SlimResponse which takes care of this for us so that we don’t need to do it manually everywhere we want Slimmage. SlimResponse used the HTMLAgilityPack to check `<img>` tags that have "slimmage=true" in their href and then wrap them in the `<noscript>` tag meaning we don’t need to do anything to our HTML markup in our templates.
 In Visual Studio (if you don’t use Visual Studio, don’t worry, see Slimsy below) package manager execute: `"Install-Package Imazen.SlimResponse"`
 
 **Step 8:** Adjust the Razor to work with SlimResponse
 	
-		<img src="@featureImage.GetCropUrl(270, 161, ratioMode:ImageCropRatioMode.Height, furtherOptions:"&slimmage=true")" alt="" />
+Firstly add a using at the top of your cshtml file
+
+    @using Umbraco.Web.Models
+
+Now we need to modify our `GetCropUrl` method parameters
+
+	<img src="@featureImage.GetCropUrl(270, 161, ratioMode:ImageCropRatioMode.Height, furtherOptions:"&slimmage=true")" alt="" />
+
 We need to add the ratioMode parameter, this will mean that ImageProcessor will resize the height as a ratio of the width, we need this so that our images height is scaled when Slimmage.js alters the width. Additionally we add the furtherOptions parameter with `&slimmage=true` so that SlimResponse will pick up our images and convert them to `<noscript>` tags 
 
 ![noscript!](Figure8.png)<br/>
